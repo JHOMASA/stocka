@@ -8,6 +8,20 @@ from core.dental import DentalInventoryManager
 from integrations.whatsapp import WhatsAppIntegration
 from integrations.sunat import SunatIntegration
 from database.db import InventoryDB
+import os
+import sys
+
+# Debug paths
+print("\n=== DEBUG INFO ===")
+print("Current directory:", os.getcwd())
+print("Parent directory contents:", os.listdir('..'))
+print("Python path:", sys.path)
+
+try:
+    from database.db import InventoryDB
+    print("SUCCESS: Import worked!")
+except ImportError as e:
+    print("FAILED:", str(e))
 
 # Configuración inicial
 st.set_page_config(
