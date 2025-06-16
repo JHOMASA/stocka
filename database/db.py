@@ -1,7 +1,6 @@
 import sqlite3
 from pathlib import Path
 from typing import Dict, List, Optional
-from database.db import InventoryDB
 
 class InventoryDB:
     def __init__(self, db_path: str = None):
