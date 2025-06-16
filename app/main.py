@@ -7,7 +7,7 @@ from core.calculator import InventoryCalculator
 from core.dental import DentalInventoryManager
 from integrations.whatsapp import WhatsAppIntegration
 from integrations.sunat import SunatIntegration
-from database.db import InventoryDB
+
 
 # Configuración inicial
 st.set_page_config(
