@@ -7,7 +7,7 @@ from core.calculator import InventoryCalculator
 from core.dental import DentalInventoryManager
 from integrations.whatsapp import WhatsAppIntegration
 from integrations.sunat import SunatIntegration
-from ..database.db import InventoryDB
+from stocka.database.db import InventoryDB
 import os
 import sys
 
