@@ -1,18 +1,20 @@
-# app/main.py
+# Standard library
+import os
 import sys
 from pathlib import Path
-# Add the project root to Python path
-sys.path.append(str(Path(__file__).parent.parent)) 
-import streamlit as st
-import pandas as pd
 from datetime import datetime, timedelta
+
+# Third-party
+import pandas as pd
+import streamlit as st
+
+# Local application
+sys.path.append(str(Path(__file__).parent.parent))
+from database.db import InventoryDB
 from core.calculator import InventoryCalculator
 from core.dental import DentalInventoryManager
 from integrations.whatsapp import WhatsAppIntegration
 from integrations.sunat import SunatIntegration
-from database.db import InventoryDB
-import os
-import sys
 
 # Debug paths
 print("\n=== DEBUG INFO ===")
