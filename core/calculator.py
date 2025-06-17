@@ -2,11 +2,10 @@ from __future__ import annotations
 from typing import Dict, List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from database.db import InventoryDB  # Only for type checking
-
+    from database.db import InventoryDB
 
 class InventoryCalculator:
-    def __init__(self, db: InventoryDB):
+    def __init__(self, db: 'InventoryDB'):
         self.db = db
     
     def calcular_existencias_mes(self, producto_id: int, mes: int, anio: int, empresa_id: int = 1) -> Dict:
