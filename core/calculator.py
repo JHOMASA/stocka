@@ -1,5 +1,4 @@
 class InventoryCalculator:
-    class InventoryCalculator:
     def __init__(self, db: InventoryDB):
         self.db = db
     
