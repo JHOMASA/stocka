@@ -1,5 +1,9 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, TYPE_CHECKING
 from database.db import InventoryDB  
+
+if TYPE_CHECKING:
+    from database.db import InventoryDB  # Only for type checking
+
 
 class InventoryCalculator:
     def __init__(self, db: InventoryDB):
