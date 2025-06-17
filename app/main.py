@@ -1,15 +1,18 @@
-# Standard library
 import os
 import sys
 from pathlib import Path
+
+# Add project root to path BEFORE any local imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+# Standard library imports
 from datetime import datetime, timedelta
 
-# Third-party
+# Third-party imports
 import pandas as pd
 import streamlit as st
 
-# Local application
-sys.path.append(str(Path(__file__).parent.parent))
+# Local application imports
 from database.db import InventoryDB
 from core.calculator import InventoryCalculator
 from core.dental import DentalInventoryManager
