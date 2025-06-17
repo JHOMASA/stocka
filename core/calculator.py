@@ -1,3 +1,6 @@
+from typing import Dict, List, Optional
+from database.db import InventoryDB  
+
 class InventoryCalculator:
     def __init__(self, db: InventoryDB):
         self.db = db
