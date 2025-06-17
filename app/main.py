@@ -2,7 +2,7 @@
 import sys
 from pathlib import Path
 # Add the project root to Python path
-sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent)) 
 import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
