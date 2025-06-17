@@ -3,6 +3,14 @@ from typing import Optional
 import logging
 from datetime import datetime
 
+try:
+    import pywhatkit as wk
+except ImportError:
+    class MockWhatsApp:
+        def send_alert(self, *args, **kwargs):
+            print("WhatsApp integration disabled - pywhatkit not installed")
+    wk = MockWhatsApp()
+
 class WhatsAppIntegration:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
