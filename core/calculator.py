@@ -1,5 +1,6 @@
+# core/calculator.py
+from __future__ import annotations
 from typing import Dict, List, Optional, TYPE_CHECKING
-from database.db import InventoryDB  
 
 if TYPE_CHECKING:
     from database.db import InventoryDB  # Only for type checking
@@ -86,4 +87,3 @@ class InventoryCalculator:
         """
         result = self.db.execute_query(query, (producto_id,))
         return result[0] if result else None
-
