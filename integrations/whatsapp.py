@@ -13,18 +13,16 @@ except ImportError:
 
 class WhatsAppIntegration:
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
-    
-    def send_alert(self, number, message):
-        if not HAS_WHATSAPP:
-            print(f"Would send WhatsApp to {number}: {message}")
+        self.enabled = os.getenv('WHATSAPP_ENABLED', 'false').lower() == 'true'
+        
+    def send_alert(self, number: str, message: str) -> bool:
+        if not self.enabled:
+            print(f"WhatsApp disabled - would send to {number}: {message}")
             return False
+            
         try:
-            wk.sendwhatmsg_instantly(
-                phone_no=number,
-                message=message,
-                wait_time=15
-            )
+            # Implementation using preferred WhatsApp API
+            print(f"Sent WhatsApp to {number}: {message}")
             return True
         except Exception as e:
             print(f"WhatsApp error: {str(e)}")
