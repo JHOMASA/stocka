@@ -45,3 +45,44 @@ class WhatsAppIntegration:
         except Exception as e:
             self.logger.error(f"Error sending order: {e}")
             return False
+    def calcular_stock_acumulado(self, familia: str = None, subfamilia: str = None) -> Dict:
+        """Calcula stock total agrupado por familia/subfamilia"""
+        query = """
+        SELECT 
+            familia,
+            subfamilia,
+            SUM(stock) as cantidad,
+            SUM(stock * costo_unitario) as costo_total,
+            SUM(stock * precio_venta) as valor_total
+        FROM productos
+        WHERE activo = TRUE
+        """
+        
+        params = []
+        if familia:
+            query += " AND familia = ?"
+            params.append(familia)
+        if subfamilia:
+            query += " AND subfamilia = ?"
+            params.append(subfamilia)
+        
+        query += " GROUP BY familia, subfamilia"
+        
+        return self.db.execute_query(query, params)
+    
+    def actualizar_stock_familias(self, mes: int, anio: int):
+        """Actualiza la tabla de stock acumulado por familia"""
+        datos = self.calcular_stock_acumulado()
+        
+        for item in datos:
+            self.db.execute_update("""
+            INSERT OR REPLACE INTO stock_familias VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
+                item['familia'],
+                item['subfamilia'],
+                mes,
+                anio,
+                item['cantidad'],
+                item['costo_total'],
+                item['valor_total']
+            ))
