@@ -1,7 +1,10 @@
+from __future__ import annotations
+from typing import Dict, List, Optional, TYPE_CHECKING
 from datetime import datetime, timedelta
-from typing import Dict, List
-from database.db import InventoryDB
-from core.calculator import InventoryCalculator
+
+if TYPE_CHECKING:
+    from database.db import InventoryDB
+    from core.calculator import InventoryCalculator
 
 class DentalInventoryManager:
     def __init__(self, db: InventoryDB):
