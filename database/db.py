@@ -4,7 +4,6 @@ from typing import Dict, List, Optional
 
 class InventoryDB:
     def __init__(self, db_path: str = None):
-        """Initialize database with dental-specific schema"""
         try:
             if db_path is None:
                 db_path = Path(__file__).parent.parent / "data" / "dental_inventory.db"
