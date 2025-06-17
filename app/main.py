@@ -1,13 +1,16 @@
 # app/main.py
+import sys
+from pathlib import Path
+# Add the project root to Python path
+sys.path.append(str(Path(__file__).parent.parent))
 import streamlit as st
 import pandas as pd
 from datetime import datetime, timedelta
-from database.db import InventoryDB
 from core.calculator import InventoryCalculator
 from core.dental import DentalInventoryManager
 from integrations.whatsapp import WhatsAppIntegration
 from integrations.sunat import SunatIntegration
-from stocka.database.db import InventoryDB
+from database.db import InventoryDB
 import os
 import sys
 
