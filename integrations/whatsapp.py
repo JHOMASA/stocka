@@ -5,34 +5,29 @@ from datetime import datetime
 
 try:
     import pywhatkit as wk
+    HAS_WHATSAPP = True
 except ImportError:
-    class MockWhatsApp:
-        def send_alert(self, *args, **kwargs):
-            print("WhatsApp integration disabled - pywhatkit not installed")
-    wk = MockWhatsApp()
+    HAS_WHATSAPP = False
+    import warnings
+    warnings.warn("pywhatkit not installed - WhatsApp features disabled")
 
 class WhatsAppIntegration:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
     
-    def send_alert(self, phone_number: str, message: str) -> bool:
-        """Send inventory alert via WhatsApp"""
+    def send_alert(self, number, message):
+        if not HAS_WHATSAPP:
+            print(f"Would send WhatsApp to {number}: {message}")
+            return False
         try:
-            # Remove any spaces or special characters
-            phone_number = ''.join(c for c in phone_number if c.isdigit())
-            
-            if not phone_number.startswith('51'):
-                phone_number = f'51{phone_number}'  # Default to Peru country code
-            
             wk.sendwhatmsg_instantly(
-                phone_no=f"+{phone_number}",
+                phone_no=number,
                 message=message,
-                wait_time=15,
-                tab_close=True
+                wait_time=15
             )
             return True
         except Exception as e:
-            self.logger.error(f"Error sending WhatsApp alert: {e}")
+            print(f"WhatsApp error: {str(e)}")
             return False
     
     def send_order_to_supplier(self, supplier_phone: str, order_details: Dict) -> bool:
