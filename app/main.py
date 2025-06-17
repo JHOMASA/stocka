@@ -25,30 +25,26 @@ print("Current directory:", os.getcwd())
 print("Parent directory contents:", os.listdir('..'))
 print("Python path:", sys.path)
 
-try:
-    from database.db import InventoryDB
-    print("SUCCESS: Import worked!")
-except ImportError as e:
-    print("FAILED:", str(e))
-
-# Configuración inicial
+# Initialize app
 st.set_page_config(
     page_title="Dental Inventory PRO",
     page_icon="🦷",
     layout="wide"
 )
 
-# Inicialización de la base de datos y módulos
 @st.cache_resource
 def init_app():
     db = InventoryDB()
-    calculator = InventoryCalculator(db)
-    dental_manager = DentalInventoryManager(db)
-    whatsapp = WhatsAppIntegration()
-    sunat = SunatIntegration()
-    return db, calculator, dental_manager, whatsapp, sunat
+    return {
+        'db': db,
+        'calculator': InventoryCalculator(db),
+        'dental_manager': DentalInventoryManager(db),
+        'whatsapp': WhatsAppIntegration(),
+        'sunat': SunatIntegration()
+    }
 
-db, calculator, dental_manager, whatsapp, sunat = init_app()
+app = init_app()
+
 
 # Sidebar - Menú principal
 st.sidebar.title("Menú Principal")
