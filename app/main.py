@@ -15,7 +15,7 @@ from integrations.sunat import PDF_ENGINE, FPDF
 
 st.title("Dental Inventory System")
 
- Show Python version
+# Show Python version - THIS WAS MISSING THE COMMENT SYMBOL
 st.write(f"Python version: {sys.version}")
 
 if PDF_ENGINE != "none":
@@ -35,6 +35,7 @@ else:
     3. Check runtime.txt specifies python-3.10.13
     4. Contact Streamlit support with these logs
     """)
+
 from importlib import util
 
 if util.find_spec("fpdf"):
