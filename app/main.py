@@ -24,7 +24,10 @@ if PDF_ENGINE != "none":
     except Exception as e:
         st.error(f"PDF test failed: {str(e)}")
 else:
-    st.error(""" ❌ PDF generation disabled - missing fpdf2 package Required steps:
+    st.error("""
+    ❌ PDF generation disabled - missing fpdf2 package
+    
+    Required steps:
     1. Check requirements.txt contains 'fpdf2==2.7.7'
     2. Verify runtime.txt specifies python-3.10.13
     3. Clear Streamlit Cloud cache
