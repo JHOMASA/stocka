@@ -5,66 +5,46 @@ from typing import Any, Type
 import sys
 import warnings
 from io import BytesIO
-class FPDF:
-    """PDF generator using reportlab as fallback"""
-    def __init__(self, *args, **kwargs):
+
+class PDFGenerator:
+    """Built-in PDF generation using reportlab"""
+    def __init__(self):
         try:
             from reportlab.pdfgen import canvas
-            self._buffer = BytesIO()
-            self._canvas = canvas.Canvas(self._buffer)
-            self._content = []
+            self.buffer = io.BytesIO()
+            self.canvas = canvas.Canvas(self.buffer)
+            self.y_position = 800  # Start position
+            self.font_size = 12
         except ImportError:
             raise RuntimeError(
-                "No PDF generation available. Install either:\n"
-                "1. fpdf2: pip install fpdf2\n"
-                "2. reportlab: pip install reportlab"
+                "PDF generation requires reportlab. Install with: pip install reportlab"
             )
 
     def add_page(self):
         """Add new page"""
-        pass
+        self.canvas.showPage()
+        self.y_position = 800  # Reset position
 
     def set_font(self, family: str, style: str = '', size: float = 12):
-        """Set font (stub implementation)"""
-        pass
+        """Set font style"""
+        self.font_size = size
+        self.canvas.setFont(family, size)
 
     def cell(self, w: float = 0, h: float = 0, txt: str = '', 
              border: int = 0, ln: int = 0, align: str = 'L', 
              fill: bool = False, link: str = ''):
         """Add text cell"""
-        self._content.append(txt)
+        self.canvas.drawString(100, self.y_position, txt)
+        self.y_position -= self.font_size + 5  # Move down for next line
 
     def output(self, name: str = '', dest: str = '') -> bytes:
         """Generate final PDF"""
-        for text in self._content:
-            self._canvas.drawString(100, 100, text)
-        self._canvas.save()
-        return self._buffer.getvalue()
-# Try all possible import methods
-PDF_ENGINE = "reportlab-fallback"
-FPDF: Type = _FPDFStub
+        self.canvas.save()
+        return self.buffer.getvalue()
 
-try:
-    # Primary import method
-    from fpdf import FPDF
-    PDF_ENGINE = "fpdf2"
-except ImportError:
-    try:
-        # Alternative import path
-        from fpdf.fpdf import FPDF
-        PDF_ENGINE = "fpdf2-absolute"
-    except ImportError:
-        try:
-            # Legacy import style
-            import fpdf2
-            from fpdf2 import FPDF
-            PDF_ENGINE = "fpdf2-legacy"
-        except ImportError:
-            warnings.warn(
-                "PDF generation unavailable. Install with: pip install fpdf2",
-                RuntimeWarning,
-                stacklevel=2
-            )
+# Alias for compatibility
+FPDF = PDFGenerator
+PDF_ENGINE = "reportlab-builtin"
 
 def verify_pdf_support() -> bool:
     """Check if PDF generation is available"""
