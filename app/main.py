@@ -16,6 +16,13 @@ try:
     st.success("✅ fpdf2 installed correctly!")
 except ImportError:
     st.error("❌ fpdf2 missing - check requirements.txt")
+from importlib import util
+
+if util.find_spec("fpdf"):
+    st.success("✅ fpdf2 installed correctly!")
+    st.code(str(util.find_spec("fpdf")))
+else:
+    st.error("❌ fpdf2 still missing - contact support")
 
 # Local application imports
 from database.db import InventoryDB
