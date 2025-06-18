@@ -4,12 +4,25 @@ import os
 from typing import Dict  
 
 try:
+    # First try modern fpdf2
     from fpdf import FPDF
-    HAS_PDF = True
+    PDF_ENGINE = "fpdf2"
 except ImportError:
-    HAS_PDF = False
+    try:
+        # Fallback to legacy install name
+        import fpdf2
+        from fpdf2 import FPDF
+        PDF_ENGINE = "fpdf2-legacy"
+    except ImportError as e:
+        PDF_ENGINE = None
+        raise ImportError(
+            "PDF generation disabled. Install with: "
+            "pip install fpdf2"
+        ) from e
+
+if not PDF_ENGINE:
     import warnings
-    warnings.warn("fpdf2 not installed - PDF generation disabled")
+    warnings.warn("PDF generation unavailable - install fpdf2")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
