@@ -11,6 +11,11 @@ from datetime import datetime, timedelta
 # Third-party imports
 import pandas as pd
 import streamlit as st
+try:
+    from fpdf import FPDF
+    st.success("✅ fpdf2 installed correctly!")
+except ImportError:
+    st.error("❌ fpdf2 missing - check requirements.txt")
 
 # Local application imports
 from database.db import InventoryDB
