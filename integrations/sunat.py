@@ -15,10 +15,9 @@ try:
     PDF_ENGINE = "fpdf2"
 except ImportError:
     try:
-        # Try alternative import path
-        import fpdf
-        from fpdf import FPDF
-        PDF_ENGINE = "fpdf2-alternate"
+        # Try absolute import path
+        from fpdf.fpdf import FPDF
+        PDF_ENGINE = "fpdf2-absolute"
     except ImportError:
         # Final fallback
         class FPDF:
@@ -37,7 +36,6 @@ except ImportError:
 # Export the FPDF class
 if FPDF is None:
     FPDF = type('FPDF', (), {})
-
 if not PDF_ENGINE:
     import warnings
     warnings.warn("PDF generation unavailable - install fpdf2")
