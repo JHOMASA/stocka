@@ -4,27 +4,33 @@ import os
 from typing import Optional, Type
 import sys
 import warnings
+
 class _FPDFStub:
-    """Fallback class when fpdf2 is not available"""
+    """Fallback class when PDF generation is unavailable"""
     def __init__(self, *args, **kwargs):
         raise RuntimeError(
-            "PDF functionality disabled. Required package not found.\n"
+            "PDF generation disabled. Required package not found.\n"
             "Install with: pip install fpdf2"
         )
+    def __getattr__(self, name: str) -> Any:
+        raise RuntimeError("PDF functionality not available")
 
 # Try all possible import methods
 PDF_ENGINE: str = "none"
 FPDF: Type = _FPDFStub
 
 try:
+    # Primary import method
     from fpdf import FPDF
     PDF_ENGINE = "fpdf2"
 except ImportError:
     try:
+        # Alternative import path
         from fpdf.fpdf import FPDF
         PDF_ENGINE = "fpdf2-absolute"
     except ImportError:
         try:
+            # Legacy import style
             import fpdf2
             from fpdf2 import FPDF
             PDF_ENGINE = "fpdf2-legacy"
@@ -34,10 +40,23 @@ except ImportError:
                 RuntimeWarning,
                 stacklevel=2
             )
+
 def verify_pdf_support() -> bool:
     """Check if PDF generation is available"""
     return PDF_ENGINE != "none"
 
+def generate_pdf_fallback(content: str) -> bytes:
+    """Fallback PDF generation using reportlab"""
+    try:
+        from reportlab.pdfgen import canvas
+        from io import BytesIO
+        buffer = BytesIO()
+        p = canvas.Canvas(buffer)
+        p.drawString(100, 100, content)
+        p.save()
+        return buffer.getvalue()
+    except ImportError:
+        raise RuntimeError("No PDF generation methods available")
 # Export the FPDF class
 if FPDF is None:
     FPDF = type('FPDF', (), {})
