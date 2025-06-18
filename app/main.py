@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 # Third-party imports
 import pandas as pd
 import streamlit as st
-from integrations.sunat import PDF_ENGINE, FPDF
+from integrations.sunat import PDF_ENGINE, FPDF as PDFGenerator
 
 st.title("Dental Inventory System")
 
