@@ -43,10 +43,20 @@ class PDFGenerator:
         return FPDF
 
     def _try_reportlab(self):
-        """Initialize reportlab engine"""
-        from reportlab.pdfgen import canvas
-        from reportlab.lib.pagesizes import letter
-        return {'canvas': canvas, 'pagesize': letter}
+    """Initialize reportlab engine"""
+      try:
+         from reportlab.pdfgen import canvas
+         from reportlab.lib.pagesizes import letter
+         from reportlab.platypus import Table  # Add this
+         from reportlab.lib import colors      # Add this
+         return {
+            'canvas': canvas, 
+            'pagesize': letter,
+            'Table': Table,                  # Add this
+            'colors': colors                 # Add this
+         }
+       except ImportError:
+        return None
 
     def _try_pdfkit(self):
         """Initialize pdfkit engine"""
@@ -226,16 +236,19 @@ class PDFGenerator:
         return elements
 
     def _create_reportlab_items_table(self, items: list) -> Table:
-        """Create items table for reportlab"""
-        data = [['Cant.', 'Descripción', 'P. Unit.', 'Total']]
-        
-        for item in items:
-            data.append([
-                str(item['cantidad']),
-                item['descripcion'],
-                f"S/. {item['precio_unitario']:.2f}",
-                f"S/. {item['total']:.2f}"
-            ])
+       """Create items table for reportlab"""
+       from reportlab.platypus import Table  # Move import here if needed
+       from reportlab.lib import colors
+    
+       data = [['Cant.', 'Descripción', 'P. Unit.', 'Total']]
+    
+       for item in items:
+          data.append([
+            str(item['cantidad']),
+            item['descripcion'],
+            f"S/. {item['precio_unitario']:.2f}",
+            f"S/. {item['total']:.2f}"
+        ])
         
         table = Table(data, colWidths=[30, 200, 60, 60])
         table.setStyle(TableStyle([
