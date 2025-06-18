@@ -1,7 +1,7 @@
 from fpdf import FPDF
 from datetime import datetime
 import os
-from typing import Dict 
+from typing import Dict  
 
 try:
     from fpdf import FPDF
