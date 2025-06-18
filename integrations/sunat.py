@@ -18,24 +18,24 @@ class PDFGenerator:
         self.pdf_engine = self._init_pdf_engine()
         
     def _init_pdf_engine(self) -> Tuple[str, Any]:
-        """Initialize the best available PDF engine"""
-        engines = [
-            ('fpdf2', self._try_fpdf2),
-            ('reportlab', self._try_reportlab),
-            ('pdfkit', self._try_pdfkit)
-        ]
+     """Initialize the best available PDF engine"""
+     engines = [
+        ('fpdf2', self._try_fpdf2),
+        ('reportlab', self._try_reportlab),
+        ('pdfkit', self._try_pdfkit)
+     ]
 
-        for name, init_func in engines:
-            try:
-                engine = init_func()
-                if engine:
-                    logger.info(f"Using PDF engine: {name}")
-                    return (name, engine)
-            except ImportError:
-                continue
-        
-        logger.warning("No PDF library available - PDF generation disabled")
-        return (None, None)
+      for name, init_func in engines:
+         try:
+            engine = init_func()
+            if engine:
+                logger.info(f"Using PDF engine: {name}")
+                return (name, engine)
+         except ImportError:
+            continue
+    
+    logger.warning("No PDF library available - PDF generation disabled")
+    return (None, None)
 
     def _try_fpdf2(self):
         """Initialize fpdf2 engine"""
