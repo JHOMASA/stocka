@@ -19,19 +19,25 @@ except ImportError:
         from fpdf.fpdf import FPDF
         PDF_ENGINE = "fpdf2-absolute"
     except ImportError:
-        # Final fallback
-        class FPDF:
-            def __init__(self, *args, **kwargs):
-                raise RuntimeError(
-                    "PDF functionality disabled. Required package not found.\n"
-                    "Install with: pip install fpdf2"
-                )
-        PDF_ENGINE = "none"
-        warnings.warn(
-            "PDF generation disabled. Install fpdf2 package.",
-            RuntimeWarning,
-            stacklevel=2
-        )
+        try:
+            # Try legacy import
+            import fpdf2
+            from fpdf2 import FPDF
+            PDF_ENGINE = "fpdf2-legacy"
+        except ImportError:
+            # Final fallback - mock FPDF class
+            class FPDF:
+                def __init__(self, *args, **kwargs):
+                    raise RuntimeError(
+                        "PDF functionality disabled. Required package not found.\n"
+                        "Install with: pip install fpdf2"
+                    )
+            PDF_ENGINE = "none"
+            warnings.warn(
+                "PDF generation disabled. Install fpdf2 package.",
+                RuntimeWarning,
+                stacklevel=2
+            )
 
 # Export the FPDF class
 if FPDF is None:
