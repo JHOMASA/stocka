@@ -2,23 +2,32 @@ from fpdf import FPDF
 from datetime import datetime
 import os
 from typing import Dict  
+import sys
+import warnings
+
+# PDF Engine Detection
+PDF_ENGINE = None
 
 try:
-    # First try modern fpdf2
     from fpdf import FPDF
     PDF_ENGINE = "fpdf2"
-except ImportError:
+except ImportError as e:
     try:
-        # Fallback to legacy install name
-        import fpdf2
-        from fpdf2 import FPDF
-        PDF_ENGINE = "fpdf2-legacy"
-    except ImportError as e:
-        PDF_ENGINE = None
-        raise ImportError(
-            "PDF generation disabled. Install with: "
-            "pip install fpdf2"
-        ) from e
+        import fpdf as fpdf2
+        from fpdf import FPDF
+        PDF_ENGINE = "fpdf2-fallback"
+    except ImportError:
+        warnings.warn(
+            "PDF generation disabled. Required package missing.\n"
+            "Install with: pip install fpdf2",
+            RuntimeWarning
+        )
+        # Create dummy FPDF class if not available
+        class FPDF:
+            def __init__(self, *args, **kwargs):
+                raise RuntimeError(
+                    "PDF functionality disabled. Install fpdf2 first."
+                )
 
 if not PDF_ENGINE:
     import warnings
