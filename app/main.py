@@ -18,23 +18,21 @@ st.title("Dental Inventory System")
 # Show Python version - THIS WAS MISSING THE COMMENT SYMBOL
 st.write(f"Python version: {sys.version}")
 
-if verify_pdf_support():
-    st.success(f"✅ PDF generation ready (using {PDF_ENGINE})")
-    try:
-        pdf = FPDF()
-        st.code("PDF test: FPDF() instantiated successfully")
-    except Exception as e:
-        st.error(f"PDF test failed: {str(e)}")
-else:
-    st.error("""
-    ❌ PDF generation disabled - Required package missing
-    
-    To enable PDF functionality:
-    1. Check requirements.txt contains 'fpdf2==2.7.7'
-    2. Verify deployment logs for installation errors
-    3. Contact support if issue persists
-    """)
-    st.warning("Using fallback PDF generation methods")
+try:
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.cell(txt="Test PDF Content")
+    pdf_bytes = pdf.output()
+    st.success("PDF generation working!")
+    st.download_button(
+        "Download Test PDF",
+        data=pdf_bytes,
+        file_name="test.pdf",
+        mime="application/pdf"
+    )
+except Exception as e:
+    st.error(f"PDF generation failed: {str(e)}")
 
 
 from importlib import util
