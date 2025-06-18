@@ -15,9 +15,11 @@ from integrations.sunat import PDF_ENGINE, FPDF
 
 st.title("Dental Inventory System")
 
+ Show Python version
+st.write(f"Python version: {sys.version}")
+
 if PDF_ENGINE != "none":
     st.success(f"✅ PDF generation ready (using {PDF_ENGINE})")
-    # Test PDF creation
     try:
         pdf = FPDF()
         st.code("PDF test: FPDF() instantiated successfully")
@@ -25,13 +27,13 @@ if PDF_ENGINE != "none":
         st.error(f"PDF test failed: {str(e)}")
 else:
     st.error("""
-    ❌ PDF generation disabled - missing fpdf2 package
+    ❌ Critical Error: PDF generation disabled
     
-    Required steps:
-    1. Check requirements.txt contains 'fpdf2==2.7.7'
-    2. Verify runtime.txt specifies python-3.10.13
-    3. Clear Streamlit Cloud cache
-    4. Redeploy application
+    Required actions:
+    1. Verify setup.sh exists in repo root
+    2. Confirm requirements.txt contains 'fpdf2==2.7.7'
+    3. Check runtime.txt specifies python-3.10.13
+    4. Contact Streamlit support with these logs
     """)
 from importlib import util
 
