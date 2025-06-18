@@ -44,18 +44,11 @@ class PDFGenerator:
 
     def _try_reportlab(self):
     """Initialize reportlab engine"""
-      try:
-         from reportlab.pdfgen import canvas
-         from reportlab.lib.pagesizes import letter
-         from reportlab.platypus import Table  # Add this
-         from reportlab.lib import colors      # Add this
-         return {
-            'canvas': canvas, 
-            'pagesize': letter,
-            'Table': Table,                  # Add this
-            'colors': colors                 # Add this
-         }
-       except ImportError:
+    try:
+        from reportlab.pdfgen import canvas
+        from reportlab.lib.pagesizes import letter
+        return {'canvas': canvas, 'pagesize': letter}
+    except ImportError:
         return None
 
     def _try_pdfkit(self):
