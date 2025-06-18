@@ -1,43 +1,42 @@
 from fpdf import FPDF
 from datetime import datetime
 import os
-from typing import Dict  
+from typing import Optional, Type
 import sys
 import warnings
+class _FPDFStub:
+    """Fallback class when fpdf2 is not available"""
+    def __init__(self, *args, **kwargs):
+        raise RuntimeError(
+            "PDF functionality disabled. Required package not found.\n"
+            "Install with: pip install fpdf2"
+        )
 
-# PDF Engine Detection
-PDF_ENGINE = None
-FPDF = None
+# Try all possible import methods
+PDF_ENGINE: str = "none"
+FPDF: Type = _FPDFStub
 
 try:
-    # First try standard import
     from fpdf import FPDF
     PDF_ENGINE = "fpdf2"
 except ImportError:
     try:
-        # Try absolute import path
         from fpdf.fpdf import FPDF
         PDF_ENGINE = "fpdf2-absolute"
     except ImportError:
         try:
-            # Try legacy import
             import fpdf2
             from fpdf2 import FPDF
             PDF_ENGINE = "fpdf2-legacy"
         except ImportError:
-            # Final fallback - mock FPDF class
-            class FPDF:
-                def __init__(self, *args, **kwargs):
-                    raise RuntimeError(
-                        "PDF functionality disabled. Required package not found.\n"
-                        "Install with: pip install fpdf2"
-                    )
-            PDF_ENGINE = "none"
             warnings.warn(
-                "PDF generation disabled. Install fpdf2 package.",
+                "PDF generation unavailable. Install with: pip install fpdf2",
                 RuntimeWarning,
                 stacklevel=2
             )
+def verify_pdf_support() -> bool:
+    """Check if PDF generation is available"""
+    return PDF_ENGINE != "none"
 
 # Export the FPDF class
 if FPDF is None:
