@@ -11,11 +11,20 @@ from datetime import datetime, timedelta
 # Third-party imports
 import pandas as pd
 import streamlit as st
-try:
-    from fpdf import FPDF
-    st.success("✅ fpdf2 installed correctly!")
-except ImportError:
-    st.error("❌ fpdf2 missing - check requirements.txt")
+from integrations.sunat import PDF_ENGINE
+
+st.title("Dental Inventory System")
+
+if PDF_ENGINE:
+    st.success(f"✅ PDF generation ready (using {PDF_ENGINE})")
+else:
+    st.error("""
+    ❌ PDF generation disabled - missing fpdf2 package
+    Solution:
+    1. Check requirements.txt contains 'fpdf2>=2.7.7,<3.0.0'
+    2. Clear Streamlit Cloud cache
+    3. Redeploy application
+    """)
 from importlib import util
 
 if util.find_spec("fpdf"):
