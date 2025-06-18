@@ -18,7 +18,7 @@ st.title("Dental Inventory System")
 # Show Python version - THIS WAS MISSING THE COMMENT SYMBOL
 st.write(f"Python version: {sys.version}")
 
-if PDF_ENGINE != "none":
+if verify_pdf_support():
     st.success(f"✅ PDF generation ready (using {PDF_ENGINE})")
     try:
         pdf = FPDF()
@@ -27,14 +27,15 @@ if PDF_ENGINE != "none":
         st.error(f"PDF test failed: {str(e)}")
 else:
     st.error("""
-    ❌ Critical Error: PDF generation disabled
+    ❌ PDF generation disabled - Required package missing
     
-    Required actions:
-    1. Verify setup.sh exists in repo root
-    2. Confirm requirements.txt contains 'fpdf2==2.7.7'
-    3. Check runtime.txt specifies python-3.10.13
-    4. Contact Streamlit support with these logs
+    To enable PDF functionality:
+    1. Check requirements.txt contains 'fpdf2==2.7.7'
+    2. Verify deployment logs for installation errors
+    3. Contact support if issue persists
     """)
+    st.warning("Using fallback PDF generation methods")
+
 
 from importlib import util
 
