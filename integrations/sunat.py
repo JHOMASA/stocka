@@ -7,27 +7,36 @@ import warnings
 
 # PDF Engine Detection
 PDF_ENGINE = None
+FPDF = None
 
 try:
+    # First try standard import
     from fpdf import FPDF
     PDF_ENGINE = "fpdf2"
-except ImportError as e:
+except ImportError:
     try:
-        import fpdf as fpdf2
+        # Try alternative import path
+        import fpdf
         from fpdf import FPDF
-        PDF_ENGINE = "fpdf2-fallback"
+        PDF_ENGINE = "fpdf2-alternate"
     except ImportError:
-        warnings.warn(
-            "PDF generation disabled. Required package missing.\n"
-            "Install with: pip install fpdf2",
-            RuntimeWarning
-        )
-        # Create dummy FPDF class if not available
+        # Final fallback
         class FPDF:
             def __init__(self, *args, **kwargs):
                 raise RuntimeError(
-                    "PDF functionality disabled. Install fpdf2 first."
+                    "PDF functionality disabled. Required package not found.\n"
+                    "Install with: pip install fpdf2"
                 )
+        PDF_ENGINE = "none"
+        warnings.warn(
+            "PDF generation disabled. Install fpdf2 package.",
+            RuntimeWarning,
+            stacklevel=2
+        )
+
+# Export the FPDF class
+if FPDF is None:
+    FPDF = type('FPDF', (), {})
 
 if not PDF_ENGINE:
     import warnings
