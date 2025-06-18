@@ -11,19 +11,24 @@ from datetime import datetime, timedelta
 # Third-party imports
 import pandas as pd
 import streamlit as st
-from integrations.sunat import PDF_ENGINE
+from integrations.sunat import PDF_ENGINE, FPDF
 
 st.title("Dental Inventory System")
 
-if PDF_ENGINE:
+if PDF_ENGINE != "none":
     st.success(f"✅ PDF generation ready (using {PDF_ENGINE})")
+    # Test PDF creation
+    try:
+        pdf = FPDF()
+        st.code("PDF test: FPDF() instantiated successfully")
+    except Exception as e:
+        st.error(f"PDF test failed: {str(e)}")
 else:
-    st.error("""
-    ❌ PDF generation disabled - missing fpdf2 package
-    Solution:
-    1. Check requirements.txt contains 'fpdf2>=2.7.7,<3.0.0'
-    2. Clear Streamlit Cloud cache
-    3. Redeploy application
+    st.error(""" ❌ PDF generation disabled - missing fpdf2 package Required steps:
+    1. Check requirements.txt contains 'fpdf2==2.7.7'
+    2. Verify runtime.txt specifies python-3.10.13
+    3. Clear Streamlit Cloud cache
+    4. Redeploy application
     """)
 from importlib import util
 
